@@ -1,4 +1,3 @@
-#define _GNU_SOURCE
 #include <3ds.h>
 #include <stdio.h>
 #include <string.h>
