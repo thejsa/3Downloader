@@ -1,4 +1,2 @@
-# template
-
-This is a template for starting new 3DS libctru projects.
 # 3Downloader
+A simple file downloader for the 3DS.
