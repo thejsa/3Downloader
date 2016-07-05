@@ -6,21 +6,15 @@ static SwkbdCallbackResult MyCallback(void* user, const char** ppMessage, const 
 {
 	if (strcasestr(text, "https://"))
 	{
-		*ppMessage = "Sorry, HTTPS is not supported.";
+		*ppMessage = "HTTPS is not supported yet.";
 		return SWKBD_CALLBACK_CONTINUE;
 	}
 
 	if (!strcasestr(text, "http://"))
 	{
-		*ppMessage = "Sorry, only HTTP is supported.";
+		*ppMessage = "Only HTTP is supported.";
 		return SWKBD_CALLBACK_CONTINUE;
 	}
-	
-	/*if (strstr(text, "gopher://"))
-	{
-		*ppMessage = "Omg, what year is this, 1985?";
-		return SWKBD_CALLBACK_CONTINUE;
-	}*/
 	
 	return SWKBD_CALLBACK_OK;
 }
@@ -32,10 +26,7 @@ int main(int argc, char **argv)
 
 	printf("%s %s by %s\n", APP_TITLE, APP_VERSION, APP_AUTHOR);
 	printf("Build date: %s %s\n\n", __DATE__, __TIME__);
-	printf("Press A to bring up text input\n");
-	printf("Press B to bring up numpad input\n");
-	printf("Press X to bring up western input\n");
-	printf("Press Y to bring up text filter demo\n");
+	printf("Press A to bring up URL input\n");
 	printf("Press START to exit\n");
 
 	while (aptMainLoop())
@@ -48,7 +39,7 @@ int main(int argc, char **argv)
 			break;
 
 		static SwkbdState swkbd;
-		static char mybuf[60];
+		static char mybuf[256];
 		static SwkbdStatusData swkbdStatus;
 		static SwkbdLearningData swkbdLearning;
 		SwkbdButton button = SWKBD_BUTTON_NONE;
@@ -57,13 +48,15 @@ int main(int argc, char **argv)
 		if (kDown & KEY_A)
 		{
 			didit = true;
-			swkbdInit(&swkbd, SWKBD_TYPE_NORMAL, 2, -1);
+			swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 2, 255);
 			swkbdSetInitialText(&swkbd, mybuf);
-			swkbdSetHintText(&swkbd, "Enter http:// URL to download (HTTPS is not yet supported)");
+			swkbdSetHintText(&swkbd, "Enter URL of a file to download.");
 			swkbdSetButton(&swkbd, SWKBD_BUTTON_LEFT, "Quit", false);
 		//	swkbdSetButton(&swkbd, SWKBD_BUTTON_MIDDLE, "~Middle~", true);
 			swkbdSetButton(&swkbd, SWKBD_BUTTON_RIGHT, "Download", true);
 			swkbdSetFeatures(&swkbd, SWKBD_PREDICTIVE_INPUT);
+			swkbdSetValidation(&swkbd, SWKBD_NOTEMPTY_NOTBLANK, 0, 0);
+			swkbdSetFilterCallback(&swkbd, MyCallback, NULL);
 			SwkbdDictWord words[3];
 			swkbdSetDictWord(&words[0], ".3dsx", ".3dsx");
 			swkbdSetDictWord(&words[1], ".cia", ".cia");
