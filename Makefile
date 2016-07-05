@@ -35,7 +35,7 @@ INCLUDES	:=	include
 APP_TITLE	:=	3Downloader
 APP_DESCRIPTION	:=	Simple file downloader
 APP_AUTHOR	:=	jsa (@kgbsquirrel)
-GIT_VERSION	:=	$(shell git describe --abbrev=4 --dirty --always --tags)
+GIT_VERSION	:=	$(shell git describe --dirty --always --tags)
 #ROMFS		:=	romfs
 
 #---------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ CFLAGS	:=	-g -Wall -O2 -mword-relocations \
 			-fomit-frame-pointer -ffunction-sections \
 			$(ARCH)
 
-CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS -DVERSION=\"$(echo $GIT_VERSION | sed 's/ /\\ /g')\"
+CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS -DAPP_VERSION="\"${GIT_VERSION}\"" -DAPP_TITLE="\"${APP_TITLE}\"" -DAPP_AUTHOR="\"${APP_AUTHOR}\""
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 
